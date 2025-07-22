@@ -57,7 +57,7 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         logger.log("--------------------------------------------------------------------------------------------------");
-        logger.logRequest(request);
+        logger.log(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);

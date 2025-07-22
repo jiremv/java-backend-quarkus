@@ -56,7 +56,7 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.logRequest(request);
+        logger.log(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);
