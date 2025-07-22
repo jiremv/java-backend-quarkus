@@ -55,6 +55,7 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
     }
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
+        LambdaLogger logger = context.getLogger();
         logger.log("--------------------------------------------------------------------------------------------------");
         logger.logRequest(request);
         //Se comenta la autenticación y autorización

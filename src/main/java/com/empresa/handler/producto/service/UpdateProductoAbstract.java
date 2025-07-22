@@ -52,7 +52,8 @@ public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatew
     }
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
-        GlobalLambdaLogger.logRequest(request);
+        LambdaLogger logger = context.getLogger();
+        logger.logRequest(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);

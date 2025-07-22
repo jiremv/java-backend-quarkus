@@ -48,6 +48,7 @@ public abstract class DeleteProductoAbstract implements RequestHandler<APIGatewa
     }
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
+        LambdaLogger logger = context.getLogger();
         GlobalLambdaLogger.logRequest(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
