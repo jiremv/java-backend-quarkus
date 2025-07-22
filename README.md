@@ -11,25 +11,38 @@ Este es un proyecto backend java, que puedes utilizar con tus proyectos de front
 Utilizamos **Amazon API Gateway** que se comunica muy bien con  **AWS CloudFormation**. Vemos que ha creado el API
 
 También tenemos la base de datos 100% serverless **Amazon DynamoDB**
-Esta solución
+Para arquitecturas en AWS Lambda o contenedores, Quarkus Reactivo destaca por memoria, arranque y enfoque cloud-native.
 ---
 
 ## 🏗️ Arquitectura
 
 ```plaintext
-   [Java]
-                 │
-                 ▼
-    🔥 Quarkus ya tiene Programación Reactiva
-                 │
-    (AWS Handler ya tiene Programación Reactiva)
-                 │
-                 ▼
-       📂 Amazon Handler (100% serverless, ahorro en costo de servidores)
-                 │
-                 ▼
-      (Se ejecutan los métodos de Backend)
+ [Java (Quarkus)]
+        │
+        ▼
+  Framework compatible con:
+     - Programación Imperativa
+     - Programación Reactiva (opcional: Mutiny, RESTEasy Reactive)
+        │
+        ▼
+ Compilas el Backend como:
+   Lambda Handler (RequestHandler)
+        │
+        ▼
+ Lambda ejecuta el método handleRequest()
+  (100% serverless, paga por ejecución)
+        │
+        ▼
+ Se ejecutan los métodos de backend
+
 ```
+| **Criterio**                 | **Quarkus Reactivo**                                                                              | **Spring WebFlux (Spring Reactivo)**                                        |
+| ---------------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Consumo de memoria**       | 🔥 Muy bajo. Optimizado para contenedores y serverless. Reducción agresiva del footprint.         | ⚠️ Medio. Aunque optimizado, requiere más memoria por el contexto Spring.   |
+| **Arranque (cold start)**    | ⚡ Muy rápido. Ideal para Lambda y entornos serverless donde el tiempo de arranque impacta costos. | 🕒 Más lento. El contexto de Spring Boot es más pesado en tiempo de inicio. |
+| **Ecosistema en AWS Lambda** | ✅ Excelente. Soporte nativo. Imágenes optimizadas. Buen rendimiento serverless.                   | ⚠️ Bueno. Compatible, pero menos eficiente en Lambda (cold starts mayores). |
+| **Orientación**              | 🎯 Microservicios ligeros, serverless, arquitecturas cloud-native.                                | 🎯 Microservicios clásicos. No orientado directamente a serverless.         |
+
 
 ---
 
@@ -81,14 +94,8 @@ Durante el despliegue:
 
 ---
 
-## 📊 Consulta de datos
+## 📊 Colección para probar con Postman
 
-Una vez que Firehose empiece a recibir datos:
-- Los archivos **Parquet** estarán disponibles en el bucket S3.
-- Puedes consultar los datos usando:
-  - **Amazon Athena**
-  - **Amazon Redshift Spectrum**
-  - Herramientas externas compatibles con Parquet.
 
 ---
 
