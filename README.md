@@ -10,8 +10,9 @@ Este es un proyecto backend java, que puedes utilizar con tus proyectos de front
 
 Utilizamos **Amazon API Gateway** que se comunica muy bien con  **AWS CloudFormation**. Vemos que ha creado el API
 
-También tenemos la base de datos 100% serverless **Amazon DynamoDB**
+También tenemos la base de datos 100% serverless **Amazon DynamoDB**. 
 Para arquitecturas en AWS Lambda o contenedores, Quarkus Reactivo destaca por memoria, arranque y enfoque cloud-native.
+
 ---
 
 ## 🏗️ Arquitectura
@@ -131,5 +132,6 @@ Este proyecto es de código abierto. Puedes adaptarlo y reutilizarlo bajo los t�
 ## 🧑 Contacto
 
 **Paul Rivera**
-AWS Certified Solutions Architect - Associate
-Java Developer
+- AWS Certified Solutions Architect - Associate
+- Java Developer
+
