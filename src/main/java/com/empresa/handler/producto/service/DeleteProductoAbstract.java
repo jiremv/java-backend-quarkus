@@ -20,6 +20,11 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 public abstract class DeleteProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
+    protected abstract UserSession validateAuthToken(String token, Context context);
+    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
+    private static final LambdaLogger logger = new GlobalLambdaLogger();
+    private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
         HEADERS.put("Content-Type", "application/json");
@@ -28,11 +33,6 @@ public abstract class DeleteProductoAbstract implements RequestHandler<APIGatewa
         HEADERS.put("Access-Control-Allow-Headers", "X-UserId, X-Roles, content-type, X-Custom-Header, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token");
         HEADERS.put("Access-Control-Allow-Methods", "DELETE, OPTIONS");
     }
-    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
-    protected abstract UserSession validateAuthToken(String token, Context context);
-    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
-    private static final LambdaLogger logger = new GlobalLambdaLogger();
-    private static final Map<String, String> HEADERS;
     private final Moshi moshi;
     private final JsonAdapter<ResponseProducto> responseAdapter;
     private final ProductoDAO dao;

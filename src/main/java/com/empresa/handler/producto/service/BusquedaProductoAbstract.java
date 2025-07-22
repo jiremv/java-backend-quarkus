@@ -23,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public abstract class BusquedaProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
+    protected abstract UserSession validateAuthToken(String token, Context context);
+    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
+    private static final LambdaLogger logger = new GlobalLambdaLogger();
+    private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
         HEADERS.put("Content-Type", "application/json");
@@ -31,11 +36,6 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
         HEADERS.put("Access-Control-Allow-Headers", "X-UserId, X-Roles, content-type, X-Custom-Header, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token");
         HEADERS.put("Access-Control-Allow-Methods", "PUT, OPTIONS");
     }
-    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
-    protected abstract UserSession validateAuthToken(String token, Context context);
-    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
-    private static final LambdaLogger logger = new GlobalLambdaLogger();
-    private static final Map<String, String> HEADERS;
     private final Moshi moshi;
     private final JsonAdapter<List<Producto>> listAdapter;
     private final JsonAdapter<ResponseProducto> responseAdapter;

@@ -24,6 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
+    protected abstract UserSession validateAuthToken(String token, Context context);
+    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
+    private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
         HEADERS.put("Content-Type", "application/json");
@@ -32,10 +36,6 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
         HEADERS.put("Access-Control-Allow-Headers", "X-UserId, X-Roles, content-type, X-Custom-Header, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token");
         HEADERS.put("Access-Control-Allow-Methods", "GET, OPTIONS");
     }
-    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
-    protected abstract UserSession validateAuthToken(String token, Context context);
-    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
-    private static final Map<String, String> HEADERS;
     private static final LambdaLogger logger = new GlobalLambdaLogger();
     private final Moshi moshi;
     private final JsonAdapter<ResponseProducto> responseAdapter;
@@ -55,7 +55,8 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
     }
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
-        GlobalLambdaLogger.logRequest(request);
+        logger.log("--------------------------------------------------------------------------------------------------");
+        logger.logRequest(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);
@@ -63,7 +64,9 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
         addAuthorizationHeaders(session, request);*/
         try {
             List<Producto> lista = dao.findAll();
+            logger.log("lista: "+lista);
             String json = listAdapter.toJson(lista);
+            logger.log("json: "+json);
             return success("Consulta correcta", json);
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));
