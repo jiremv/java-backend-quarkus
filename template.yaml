@@ -1,0 +1,669 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description:
+  Backend Quarkus
+
+Globals:
+  Function:
+    CodeUri: .
+    Runtime: java21
+    Timeout: 30
+    MemorySize: 1024
+    AutoPublishAlias: dev
+    Tracing: Active
+
+Parameters:
+  Environment:
+    Type: String
+    Default: "dev"
+    Description: "El entorno (e.g. dev, prod)"
+
+Resources:
+  MyApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: Backend Quarkus API
+      Description: My AWS API Gateway config
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+
+  ResourceProducto:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !GetAtt MyApi.RootResourceId
+      PathPart: productos
+      RestApiId: !Ref MyApi
+
+  ResourceProductoId:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId: !Ref ResourceProducto
+      PathPart: "{id}"
+      RestApiId: !Ref MyApi
+
+  ProductoOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{ \"statusCode\": 200 }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProducto
+      RestApiId: !Ref MyApi
+
+  ProductoIdOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: OPTIONS
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET,PUT,DELETE,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: MOCK
+        RequestTemplates:
+          "application/json": "{ \"statusCode\": 200 }"
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProductoId
+      RestApiId: !Ref MyApi
+
+  ProductoGetMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{ \"statusCode\": 200 }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET, OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt ReadProductoFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProducto
+      RestApiId: !Ref MyApi
+
+  ProductoGetByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        RequestTemplates:
+          "application/json": "{  \"statusCode\": 200 }"
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'GET, OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Arn}/invocations"
+          - Arn: !GetAtt BusquedaProductoFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProductoId
+      RestApiId: !Ref MyApi
+
+  ProductoPostMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations"
+          - lambdaArn: !GetAtt CrearProductoFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProducto
+      RestApiId: !Ref MyApi
+
+  ProductoUpdateMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: PUT
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'PUT,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambArn}/invocations"
+          - lambArn: !GetAtt UpdateProductoFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProductoId
+      RestApiId: !Ref MyApi
+
+  ProductoDeleteMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: DELETE
+      Integration:
+        IntegrationHttpMethod: POST
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Authorization, Content-Type, X-UserId, X-Roles, X-Custom-Header, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'DELETE, OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            StatusCode: '200'
+        Type: AWS_PROXY
+        Uri: !Sub
+          - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdarn}/invocations"
+          - lambdarn: !GetAtt DeleteProductoFunction.Arn
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: '200'
+      OperationName: productos
+      ResourceId: !Ref ResourceProductoId
+      RestApiId: !Ref MyApi
+
+  #DynamoDB
+  ProductoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Producto-${Environment}"
+      AttributeDefinitions:
+        - AttributeName: productoId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: productoId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+
+#RESTful
+  ReadProductoFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CustomLambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource: !GetAtt ProductoTable.Arn
+
+  ReadProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ReadProducto
+      Handler: com.empresa.handler.producto.ReadProducto
+      Runtime: java21
+      Role: !GetAtt ReadProductoFunctionRole.Arn
+      Events:
+        ReadRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productos
+            Method: GET
+    DependsOn:
+      - ReadProductoFunctionRole
+
+  ReadProductoInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ReadProductoInvokePolicy
+      Roles:
+        - !Ref ReadProductoFunctionRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${ReadProductoFunction}
+
+  ReadProductoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ReadProductoFunction}"
+      RetentionInDays: 1
+
+  BusquedaProductoFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CustomLambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource: !GetAtt ProductoTable.Arn
+
+  BusquedaProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: BusquedaProducto
+      Handler: com.empresa.handler.producto.BusquedaProducto
+      Runtime: java21
+      Role: !GetAtt BusquedaProductoFunctionRole.Arn
+      Events:
+        BusquedaRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productos/{id}
+            Method: GET
+    DependsOn:
+      - BusquedaProductoFunctionRole
+
+  BusquedaProductoInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: BusquedaProductoInvokePolicy
+      Roles:
+        - !Ref BusquedaProductoFunctionRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${BusquedaProductoFunction}
+
+  BusquedaProductoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${BusquedaProductoFunction}"
+      RetentionInDays: 1
+
+  CrearProductoFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CustomLambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource: !GetAtt ProductoTable.Arn
+
+  CrearProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CrearProducto
+      Handler: com.empresa.handler.producto.CreateProducto
+      Runtime: java21
+      Role: !GetAtt CrearProductoFunctionRole.Arn
+      Events:
+        CrearRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productos
+            Method: POST
+    DependsOn:
+      - CrearProductoFunctionRole
+
+  CrearProductoInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: CrearProductoInvokePolicy
+      Roles:
+        - !Ref CrearProductoFunctionRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${CrearProductoFunction}
+
+  CrearProductoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CrearProductoFunction}"
+      RetentionInDays: 1
+
+  UpdateProductoFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CustomLambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource: !GetAtt ProductoTable.Arn
+
+  UpdateProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateProducto
+      Handler: com.empresa.handler.producto.UpdateProducto
+      Runtime: java21
+      Role: !GetAtt UpdateProductoFunctionRole.Arn
+      Events:
+        PutRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productos/{id}
+            Method: PUT
+    DependsOn:
+      - UpdateProductoFunctionRole
+
+  UpdateProductoInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: UpdateProductoInvokePolicy
+      Roles:
+        - !Ref UpdateProductoFunctionRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${UpdateProductoFunction}
+
+  UpdateProductoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${UpdateProductoFunction}"
+      RetentionInDays: 1
+
+  DeleteProductoFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: CustomLambdaExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource: !GetAtt ProductoTable.Arn
+
+  DeleteProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DeleteProducto
+      Handler: com.empresa.handler.producto.DeleteProducto
+      Runtime: java21
+      Role: !GetAtt DeleteProductoFunctionRole.Arn
+      Events:
+        DeleteRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productos/{id}
+            Method: DELETE
+    DependsOn:
+      - DeleteProductoFunctionRole
+
+  DeleteProductoInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: DeleteProductoInvokePolicy
+      Roles:
+        - !Ref DeleteProductoFunctionRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${DeleteProductoFunction}
+
+  DeleteProductoFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${DeleteProductoFunction}"
+      RetentionInDays: 1
+
+  ProductoGetApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - ReadProductoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt ReadProductoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/productos
+
+  ProductoPostApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - CrearProductoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt CrearProductoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/POST/productos
+
+  ProductoGetByIdApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - BusquedaProductoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt BusquedaProductoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/GET/productos/{id}
+
+  ProductoUpdateApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - UpdateProductoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt UpdateProductoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/PUT/productos/{id}
+
+  ProductoDeleteApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    DependsOn:
+      - MyApi
+      - DeleteProductoFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt DeleteProductoFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/productos/{id}
+
+
+  apiGatewayDeployment:
+    Type: "AWS::ApiGateway::Deployment"
+    DependsOn:
+      - ProductoGetMethod
+      - ProductoGetByIdMethod
+      - ProductoPostMethod
+      - ProductoUpdateMethod
+      - ProductoDeleteMethod
+    Properties:
+      RestApiId: !Ref MyApi
+      StageName: prod
+
+Outputs:
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
