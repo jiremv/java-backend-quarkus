@@ -1,6 +1,6 @@
 # 🔥  java-backend-quarkus
 
-Application Java with Quarkus 100% Serverless
+Application AWS Java with Quarkus 100% Serverless
 
 ## 📄 Descripción
 
@@ -45,6 +45,62 @@ Para arquitecturas en AWS Lambda o contenedores, Quarkus Reactivo destaca por me
 | **Orientación**              | 🎯 Microservicios ligeros, serverless, arquitecturas cloud-native.                                | 🎯 Microservicios clásicos. No orientado directamente a serverless.         |
 
 
+## Comparativa Serverless Java - AWS Lambda vs Azure Functions
+Comparativa profesional del despliegue de funciones serverless escritas en **Java** en los entornos **AWS Lambda** y **Azure Functions**, destacando ventajas, limitaciones y costos asociados.
+
+
+## Diagrama Comparativo
+
+```plaintext
+                SERVERLESS JAVA COMPARISON
+
+                ┌──────────────────────────────────────────────────────┐
+                │ AWS Lambda                 │
+                └──────────────────────────────────────────────────────┘
+                           │
+           100% serverless (pago por uso)
+                           │
+      Cold start mitigable con SnapStart
+                           │
+       No necesitas instancias reservadas
+                           │
+           Costos variables (por ejecución)
+
+                           ▼
+
+                ✅ Optimizado para serverless
+
+
+                ┌──────────────────────────────────────────────────────┐
+                │ Azure Functions            │
+                └──────────────────────────────────────────────────────┘
+                           │
+            Execution Plan (pago por uso)
+                           │
+      ⚠️ Cold starts graves con Java
+                           │
+      Premium Plan (instancias warm fijas)
+                           │
+      🔥 Costo fijo incluso sin tráfico
+                           │
+        No 100% serverless bajo Premium
+
+                           ▼
+
+               ⚠️ Penalización económica
+            si deseas rendimiento constante
+```
+
+
+## Conclusión Profesional
+
+- **AWS Lambda** permite una verdadera ejecución **serverless** optimizada para **Java**, gracias a SnapStart y frameworks ligeros como Quarkus o Micronaut.
+- **Azure Functions**, aunque soporta Java, requiere activar el **Premium Plan** (costo fijo) para evitar los problemas de cold start.
+
+---
+
+> En proyectos serverless con Java donde la eficiencia y el costo variable son importantes, **AWS Lambda** es la opción recomendada.
+
 ---
 
 ## 🛠️ Servicios AWS utilizados
@@ -53,17 +109,17 @@ Para arquitecturas en AWS Lambda o contenedores, Quarkus Reactivo destaca por me
   - Permite controlar CORS .
   - Permite HTTP RESTful.
   - Proporciona el API para cliente frontend.
-    ![img_1.png](img_1.png)
+    ![./images/img_1.png](./images/img_1.png)
 
 - **AWS CloudFormation**
   - Proporciona IaC.
   - Crea el Stack en los ambientes Dev y Prod.
-    ![img_2.png](img_2.png)
+    ![./images/img_2.png](./images/img_2.png)
 
 - **Amazon DynamoDB**
   - Base de Datos 100% serverless.
   - Es no relacional.
-    ![img_3.png](img_3.png)
+    ![./images/img_3.png](./images/img_3.png)
 
 - **AWS SAM (Serverless Application Model)**
   - Despliegue de la infraestructura como código (`template.yaml`).
@@ -74,7 +130,7 @@ Para arquitecturas en AWS Lambda o contenedores, Quarkus Reactivo destaca por me
 
 ### 1️⃣ GitHub Actions
 - Diríjase al link Actions, allí podrá visualizar el despliegue DevOps.
-  ![img_4.png](img_4.png)
+  ![./images/img_4.png](./images/img_4.png)
 
 ### 2️⃣ Clona el repositorio y navega al proyecto:
 ```bash
@@ -133,5 +189,5 @@ Este proyecto es de código abierto. Puedes adaptarlo y reutilizarlo bajo los t�
 
 **Paul Rivera**
 - AWS Certified Solutions Architect - Associate
-- Java Developer
+- Oracle Java EE Master Developer
 
