@@ -9,7 +9,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.empresa.handler.diccionario.service.BusquedaProductoAbstract;
+import com.empresa.handler.producto.service.UpdateProductoAbstract;
 import com.empresa.model.UserSession;
 import com.empresa.util.MyLambdaLogger;
 import com.squareup.moshi.JsonAdapter;
@@ -24,7 +24,8 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.*;
 import static com.empresa.util.Avatar.generarColorDesdeNombre;
 import static com.empresa.util.Avatar.obtenerIniciales;
-public class BusquedaProducto extends BusquedaProductoAbstract {
+
+public class UpdateProducto extends UpdateProductoAbstract {
     private static final LambdaLogger logger = new MyLambdaLogger();
     @Override
     protected String extractAuthToken(APIGatewayProxyRequestEvent input) {
@@ -62,7 +63,7 @@ public class BusquedaProducto extends BusquedaProductoAbstract {
                     String issuer = token.getIssuer();
                     Map<String, Claim> claims = token.getClaims();
                     Claim claim_realm_access = claims.get("realm_access");
-                    UserSession estudianteSession =new UserSession(context);
+                    UserSession userSession =new UserSession(context);
                     logger.log("claim_realm_access = " + claim_realm_access.asMap());
                     Map<String, Object> realmAccess = claim_realm_access != null ? claim_realm_access.asMap() : null;
                     /////Map<String, Object> realmAccess = claim_realm_access.asMap();
@@ -129,9 +130,7 @@ public class BusquedaProducto extends BusquedaProductoAbstract {
                     if ("admin".equals(token.getClaim("preferred_username").asString())) {
                         userSession.setNivel("NIVEL admin");
                     }
-
-                    ////viene desde json de front userSession.setIdPregunta("1 one");
-                    return estudianteSession;
+                    return userSession;
                 } catch (JWTVerificationException exception) {
                     //System.out.println("Token verification failed: " + exception.getMessage());
                 } catch (Exception e) {
@@ -168,5 +167,4 @@ public class BusquedaProducto extends BusquedaProductoAbstract {
             logger.log("authInfo is null, cannot add authorization headers");
         }
     }
-
 }

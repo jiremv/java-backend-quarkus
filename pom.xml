@@ -96,16 +96,6 @@
       <artifactId>dynamodb-enhanced</artifactId>
     </dependency>
     <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-      <version>4.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jaxb</groupId>
-      <artifactId>jaxb-runtime</artifactId>
-      <version>4.0.3</version>
-    </dependency>
-    <dependency>
       <groupId>com.squareup.moshi</groupId>
       <artifactId>moshi</artifactId>
       <version>1.15.1</version>

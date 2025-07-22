@@ -9,7 +9,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.empresa.handler.diccionario.service.UpdateProductoAbstract;
+import com.empresa.handler.producto.service.CreateProductoAbstract;
 import com.empresa.model.UserSession;
 import com.empresa.util.MyLambdaLogger;
 import com.squareup.moshi.JsonAdapter;
@@ -25,7 +25,7 @@ import java.util.*;
 import static com.empresa.util.Avatar.generarColorDesdeNombre;
 import static com.empresa.util.Avatar.obtenerIniciales;
 
-public class UpdateProducto extends UpdateProductoAbstract {
+public class CreateProducto extends CreateProductoAbstract {
     private static final LambdaLogger logger = new MyLambdaLogger();
     @Override
     protected String extractAuthToken(APIGatewayProxyRequestEvent input) {
@@ -63,7 +63,7 @@ public class UpdateProducto extends UpdateProductoAbstract {
                     String issuer = token.getIssuer();
                     Map<String, Claim> claims = token.getClaims();
                     Claim claim_realm_access = claims.get("realm_access");
-                    UserSession estudianteSession =new UserSession(context);
+                    UserSession userSession =new UserSession(context);
                     logger.log("claim_realm_access = " + claim_realm_access.asMap());
                     Map<String, Object> realmAccess = claim_realm_access != null ? claim_realm_access.asMap() : null;
                     /////Map<String, Object> realmAccess = claim_realm_access.asMap();
@@ -130,9 +130,7 @@ public class UpdateProducto extends UpdateProductoAbstract {
                     if ("admin".equals(token.getClaim("preferred_username").asString())) {
                         userSession.setNivel("NIVEL admin");
                     }
-
-                    ////viene desde json de front userSession.setIdPregunta("1 one");
-                    return estudianteSession;
+                    return userSession;
                 } catch (JWTVerificationException exception) {
                     //System.out.println("Token verification failed: " + exception.getMessage());
                 } catch (Exception e) {

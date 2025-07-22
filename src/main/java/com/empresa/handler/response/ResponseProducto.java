@@ -1,25 +1,23 @@
-package com.empresa.handler.examen.response;
+package com.empresa.handler.response;
 
-import com.empresa.model.Examen;
-import com.empresa.model.ExamenSesion;
-import com.empresa.model.PreguntaSesion;
+import com.empresa.model.Producto;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ResponseRest extends com.empresa.handler.ResponseRest {
-    private Response productoResponse; // Contendrá la lista de productos
+public class ResponseProducto extends com.empresa.handler.Response {
+    private com.empresa.handler.Response productoResponse; // Contendrá la lista de productos
     private String jwtToken; // Contendrá el JWT
 
     private Map<String, Object> data = new HashMap<>();
     private String message;
     private String status;
 
-    public Response getProductoResponse() {
-        return examenSolucionResponse;
+    public com.empresa.handler.Response getProductoResponse() {
+        return productoResponse;
     }
 
-    public void setProductoResponse(Response productoResponse) {
-        this.examenSolucionResponse = productoResponse;
+    public void setProductoResponse(com.empresa.handler.Response productoResponse) {
+        this.productoResponse = productoResponse;
     }
 
     public String getJwtToken() {
@@ -31,8 +29,8 @@ public class ResponseRest extends com.empresa.handler.ResponseRest {
     }
 
     // Método utilitario opcional para establecer ambos a la vez
-    public void setResponseDataWithToken(Response examenSolucionResponse, String jwtToken) {
-        this.examenSolucionResponse = examenSolucionResponse;
+    public void setResponseDataWithToken(com.empresa.handler.Response productoResponse, String jwtToken) {
+        this.productoResponse = productoResponse;
         this.jwtToken = jwtToken;
     }
 
