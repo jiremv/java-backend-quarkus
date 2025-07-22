@@ -3,7 +3,7 @@ package com.empresa.util;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-public class MyLambdaLogger implements LambdaLogger {
+public class GlobalLambdaLogger implements LambdaLogger {
     @Override
     public void log(String message) {
         System.out.println(message);

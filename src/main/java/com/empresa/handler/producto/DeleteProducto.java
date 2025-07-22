@@ -11,7 +11,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.empresa.handler.producto.service.DeleteProductoAbstract;
 import com.empresa.model.UserSession;
-import com.empresa.util.MyLambdaLogger;
+import com.empresa.util.GlobalLambdaLogger;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -25,7 +25,7 @@ import java.util.*;
 import static com.empresa.util.Avatar.generarColorDesdeNombre;
 import static com.empresa.util.Avatar.obtenerIniciales;
 public class DeleteProducto extends DeleteProductoAbstract {
-    private static final LambdaLogger logger = new MyLambdaLogger();
+    private static final LambdaLogger logger = new GlobalLambdaLogger();
     @Override
     protected String extractAuthToken(APIGatewayProxyRequestEvent input) {
         Map<String, String> headers = input.getHeaders();

@@ -8,38 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 public class ProductoDAO {
-
-    private final DynamoDbTable<Producto> diccionarioTable;
-
+    
+    private final DynamoDbTable<Producto> productosTable;
     public ProductoDAO(DynamoDbEnhancedClient enhancedClient) {
-        this.diccionarioTable = enhancedClient.table("Producto-dev", TableSchema.fromBean(Producto.class));
+        this.productosTable = enhancedClient.table("Producto-dev", TableSchema.fromBean(Producto.class));
     }
-
     public void save(Producto diccionario) {
-        diccionarioTable.putItem(diccionario);
+        productosTable.putItem(diccionario);
     }
-
     public Optional<Producto> findById(String productoId) {
-        Producto diccionario = diccionarioTable.getItem(r -> r.key(k -> k.partitionValue(productoId)));
+        Producto diccionario = productosTable.getItem(r -> r.key(k -> k.partitionValue(productoId)));
         return Optional.ofNullable(diccionario);
     }
-
     public List<Producto> findAll() {
         List<Producto> result = new ArrayList<>();
-        diccionarioTable.scan().items().forEach(result::add);
+        productosTable.scan().items().forEach(result::add);
         return result;
     }
-
     public void deleteById(String productoId) {
-        diccionarioTable.deleteItem(r -> r.key(k -> k.partitionValue(productoId)));
+        productosTable.deleteItem(r -> r.key(k -> k.partitionValue(productoId)));
     }
-
     public void update(Producto diccionario) {
-        diccionarioTable.updateItem(diccionario);
+        productosTable.updateItem(diccionario);
     }
-
     public List<Producto> buscar(String nombre, String categoria) {
         List<Producto> todos = this.findAll();
         return todos.stream()

@@ -10,12 +10,11 @@ import com.empresa.model.Producto;
 import com.empresa.model.UserSession;
 import com.empresa.handler.response.ResponseProducto;
 import com.empresa.util.LocalDateAdapter;
-import com.empresa.util.MyLambdaLogger;
+import com.empresa.util.GlobalLambdaLogger;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDate;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
         HEADERS.put("Content-Type", "application/json");
@@ -32,15 +30,16 @@ public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatew
         HEADERS.put("Access-Control-Allow-Headers", "X-UserId, X-Roles, content-type, X-Custom-Header, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token");
         HEADERS.put("Access-Control-Allow-Methods", "PUT, OPTIONS");
     }
-    private static final LambdaLogger logger = new MyLambdaLogger();
+
     protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
     protected abstract UserSession validateAuthToken(String token, Context context);
     protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
+    private static final LambdaLogger logger = new GlobalLambdaLogger();
+    private static final Map<String, String> HEADERS;
     private final Moshi moshi;
     private final JsonAdapter<ResponseProducto> responseAdapter;
     private final JsonAdapter<Producto> jsonAdapter;
     private final ProductoDAO dao;
-    
     public UpdateProductoAbstract() {
         this.moshi = new Moshi.Builder()
                 .add(LocalDate.class, new LocalDateAdapter())
@@ -52,10 +51,9 @@ public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatew
                 .build();
         this.dao = new ProductoDAO(enhancedClient);
     }
-    
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
-        MyLambdaLogger.logRequest(request);
+        GlobalLambdaLogger.logRequest(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);
@@ -109,5 +107,4 @@ public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatew
         t.printStackTrace(new PrintWriter(sw));
         return sw.toString();
     }
-
 }
