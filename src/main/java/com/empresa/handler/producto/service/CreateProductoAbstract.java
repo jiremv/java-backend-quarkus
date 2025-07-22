@@ -51,18 +51,18 @@ public abstract class CreateProductoAbstract implements RequestHandler<APIGatewa
     }
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
-        GlobalLambdaLogger.logRequest(request);
+        logger.logRequest(request);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);
         if (session == null) return error(401, "Token inválido");
         addAuthorizationHeaders(session, request);*/
         try {
-            Producto diccionario = adapter.fromJson(request.getBody());
-            if (diccionario == null) {
+            Producto producto = adapter.fromJson(request.getBody());
+            if (producto == null) {
                 return new APIGatewayProxyResponseEvent().withStatusCode(400).withBody("JSON inválido");
             }
-            dao.save(diccionario);
+            dao.save(producto);
             return success("Producto creado correctamente");
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));
