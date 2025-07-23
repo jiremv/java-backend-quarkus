@@ -155,7 +155,7 @@ Durante el despliegue:
 
 - ✅ Completamente **serverless**.
 - ✅ Alta disponibilidad, funciona 24x7x365 sin caídas.
-- ✅ Totalmente elática, si se conectan muchos usuarios, soporta la concurrencia sin límite.
+- ✅ Totalmente elástica, si se conectan muchos usuarios, soporta la concurrencia sin límite.
 - ✅ Arquitectura automatizada, simple y escalable. Para integrar más recursos y servicios.
 - ✅ Costo controlado muy bajo 1$ al mes, sin servidores ni procesamiento batch complejo.
 
