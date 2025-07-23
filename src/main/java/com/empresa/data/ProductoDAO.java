@@ -21,6 +21,7 @@ public class ProductoDAO {
         Producto diccionario = productosTable.getItem(r -> r.key(k -> k.partitionValue(productoId)));
         return Optional.ofNullable(diccionario);
     }
+    
     public List<Producto> findAll() {
         List<Producto> result = new ArrayList<>();
         productosTable.scan().items().forEach(result::add);

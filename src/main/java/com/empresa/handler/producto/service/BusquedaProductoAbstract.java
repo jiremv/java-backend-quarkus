@@ -63,11 +63,24 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
         if (session == null) return error(401, "Token inválido");
         addAuthorizationHeaders(session, request);*/
         try {
-            Map<String, String> queryParams = request.getQueryStringParameters();
-            String nombre = queryParams != null ? queryParams.get("nombre") : null;
-            String categoria = queryParams != null ? queryParams.get("categoria") : null;
-            List<Producto> resultados = dao.buscar(nombre, categoria);
-            return success(resultados, "Búsqueda correcta");
+            Map<String, String> pathParams = request.getPathParameters();
+            String productoId = pathParams != null ? pathParams.get("id") : null;
+
+            if (productoId != null) {
+                Optional<Producto> optProducto = dao.findById(productoId);
+                if (optProducto.isPresent()) {
+                    return successMono(optProducto.get(), "Producto encontrado");
+                } else {
+                    return error(404, "Producto no encontrado");
+                }
+            } else {
+                Map<String, String> queryParams = request.getQueryStringParameters();
+                String nombre = queryParams != null ? queryParams.get("nombre") : null;
+                String categoria = queryParams != null ? queryParams.get("categoria") : null;
+
+                List<Producto> resultados = dao.buscar(nombre, categoria);
+                return success(resultados, "Búsqueda correcta");
+            }
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));
             return error(500, "Error interno del servidor");
@@ -78,6 +91,16 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
         response.setStatus("ok");
         response.setMessage(message);
         response.getData().put("productos", productos); // clave plural
+        return new APIGatewayProxyResponseEvent()
+                .withStatusCode(200)
+                .withHeaders(HEADERS)
+                .withBody(responseAdapter.toJson(response));
+    }
+    private APIGatewayProxyResponseEvent successMono(Producto producto, String message) {
+        ResponseProducto response = new ResponseProducto();
+        response.setStatus("ok");
+        response.setMessage(message);
+        response.getData().put("producto", producto);
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(200)
                 .withHeaders(HEADERS)
