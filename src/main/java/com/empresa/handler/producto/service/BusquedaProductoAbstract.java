@@ -66,26 +66,23 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
             Map<String, String> queryParams = request.getQueryStringParameters();
             String nombre = queryParams != null ? queryParams.get("nombre") : null;
             String categoria = queryParams != null ? queryParams.get("categoria") : null;
-
             List<Producto> resultados = dao.buscar(nombre, categoria);
-            String json = listAdapter.toJson(resultados);
             return success("Búsqueda correcta");
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));
             return error(500, "Error interno del servidor");
         }
     }
-
-    private APIGatewayProxyResponseEvent success(String message) {
+    private APIGatewayProxyResponseEvent success(List<Producto> productos, String message) {
         ResponseProducto response = new ResponseProducto();
         response.setStatus("ok");
         response.setMessage(message);
+        response.getData().put("productos", productos);
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(200)
                 .withHeaders(HEADERS)
                 .withBody(responseAdapter.toJson(response));
     }
-
     private APIGatewayProxyResponseEvent error(int status, String message) {
         ResponseProducto response = new ResponseProducto();
         response.setStatus("error");
