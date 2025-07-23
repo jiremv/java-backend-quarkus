@@ -69,7 +69,10 @@ public abstract class DeleteProductoAbstract implements RequestHandler<APIGatewa
             if (dao.findById(productoId).isEmpty()) {
                 return error(404, "Producto no encontrado: " + productoId);
             }
-            logger.log("Eliminando producto con ID: " + productoId);
+            logger.log("PathParameters: " + request.getPathParameters());
+            logger.log("ID a eliminar: " + productoId);
+            logger.log("PathParameters: " + request.getPathParameters());
+            logger.log("ID a eliminar: " + productoId);
             dao.deleteById(productoId);
             logger.log("Eliminación exitosa de producto: " + productoId);
             return success("Producto eliminado correctamente");
