@@ -109,17 +109,17 @@ Comparativa profesional del despliegue de funciones serverless escritas en **Jav
   - Permite controlar CORS .
   - Permite HTTP RESTful.
   - Proporciona el API para cliente frontend.
-    ![./readme/images/img_1.png](./images/img_1.png)
+    ![./readme/images/img_1.png](./readme/images/img_1.png)
 
 - **AWS CloudFormation**
   - Proporciona IaC.
   - Crea el Stack en los ambientes Dev y Prod.
-    ![./readme/images/img_2.png](./images/img_2.png)
+    ![./readme/images/img_2.png](./readme/images/img_2.png)
 
 - **Amazon DynamoDB**
   - Base de Datos 100% serverless.
   - Es no relacional.
-    ![./readme/images/img_3.png](./images/img_3.png)
+    ![./readme/images/img_3.png](./readme/images/img_3.png)
 
 - **AWS SAM (Serverless Application Model)**
   - Despliegue de la infraestructura como código (`template.yaml`).
@@ -130,7 +130,7 @@ Comparativa profesional del despliegue de funciones serverless escritas en **Jav
 
 ### 1️⃣ GitHub Actions
 - Diríjase al link Actions, allí podrá visualizar el despliegue DevOps.
-  ![./readme/images/img_4.png](./images/img_4.png)
+  ![./readme/images/img_4.png](./readme/images/img_4.png)
 
 ### 2️⃣ Clona el repositorio y navega al proyecto:
 ```bash
@@ -179,7 +179,7 @@ Puedes visualizarla usando herramientas como:
 - `swagger.json` – Formato OpenAPI 3.0
 - `swagger.yaml` – Alternativa legible en YAML
 
-![./readme/images/img.png](./images/img.png)
+![./readme/images/img.png](./readme/images/img.png)
 
 ---
 
