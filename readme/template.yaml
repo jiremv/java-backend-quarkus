@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CRUD de Productos con AWS Lambda y API Gateway
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: java21
+    MemorySize: 1024
+    Tracing: Active
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+
+Resources:
+
+  ProductosApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "ProductosApi-${Environment}"
+      StageName: prod
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+        AllowOrigin: "'*'"
+      EndpointConfiguration: REGIONAL
+
+  ListarProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.empresa.handler.producto.BuscarProductosHandler::handleRequest
+      Events:
+        GetAll:
+          Type: Api
+          Properties:
+            Path: /productos
+            Method: GET
+            RestApiId: !Ref ProductosApi
+
+  BuscarProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.empresa.handler.producto.BuscarProductoHandler::handleRequest
+      Events:
+        GetById:
+          Type: Api
+          Properties:
+            Path: /productos/{id}
+            Method: GET
+            RestApiId: !Ref ProductosApi
+
+  CrearProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.empresa.handler.producto.CrearProductoHandler::handleRequest
+      Events:
+        Post:
+          Type: Api
+          Properties:
+            Path: /productos
+            Method: POST
+            RestApiId: !Ref ProductosApi
+
+  ActualizarProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.empresa.handler.producto.ActualizarProductoHandler::handleRequest
+      Events:
+        Put:
+          Type: Api
+          Properties:
+            Path: /productos/{id}
+            Method: PUT
+            RestApiId: !Ref ProductosApi
+
+  EliminarProductoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: com.empresa.handler.producto.EliminarProductoHandler::handleRequest
+      Events:
+        Delete:
+          Type: Api
+          Properties:
+            Path: /productos/{id}
+            Method: DELETE
+            RestApiId: !Ref ProductosApi
+
+Outputs:
+  ApiURL:
+    Description: "URL del endpoint API Gateway"
+    Value: !Sub "https://${ProductosApi}.execute-api.${AWS::Region}.amazonaws.com/prod/productos"

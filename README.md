@@ -173,11 +173,16 @@ Puedes visualizarla usando herramientas como:
 
 ## 📊 Colección para probar con Postman
 
+La colección de pruebas crud es: Quarkus_crud.postman_collection.json
+
 ![./readme/images/img_5.png](./readme/images/img_5.png)
 
 ### Archivos incluidos
-- `swagger.json` – Formato OpenAPI 3.0
-- `swagger.yaml` – Alternativa legible en YAML
+- `Quarkus_crud.postman_collection.json` – Colección de las pruebas con Postman
+- `swagger-productos.json` – Formato OpenAPI 3.0
+- `swagger-productos.yaml` – Alternativa legible en YAML
+
+Estodo archivos se encuentran en la carpeta readme
 
 ![./readme/images/img.png](./readme/images/img.png)
 
