@@ -67,7 +67,7 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
             String nombre = queryParams != null ? queryParams.get("nombre") : null;
             String categoria = queryParams != null ? queryParams.get("categoria") : null;
             List<Producto> resultados = dao.buscar(nombre, categoria);
-            return success("Búsqueda correcta");
+            return success(resultados, "Búsqueda correcta");
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));
             return error(500, "Error interno del servidor");
@@ -77,7 +77,7 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
         ResponseProducto response = new ResponseProducto();
         response.setStatus("ok");
         response.setMessage(message);
-        response.getData().put("productos", productos);
+        response.getData().put("productos", productos); // clave plural
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(200)
                 .withHeaders(HEADERS)

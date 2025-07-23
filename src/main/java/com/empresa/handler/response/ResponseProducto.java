@@ -43,4 +43,8 @@ public class ResponseProducto extends com.empresa.handler.Response {
     public void setStatus(String status) {
         this.status = status;
     }
+    public Map<String, Object> getData() {
+        return data;
+    }
+
 }
