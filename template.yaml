@@ -33,7 +33,7 @@ Resources:
     Properties:
       ParentId: !GetAtt MyApi.RootResourceId
       PathPart: productos
-      RestApiId: !Ref MyApi
+      RestApiId: !Ref MyAp----------- i
 
   ResourceProductoId:
     Type: AWS::ApiGateway::Resource
@@ -649,7 +649,6 @@ Resources:
       FunctionName: !GetAtt DeleteProductoFunction.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${MyApi}/*/DELETE/productos/{id}
-
 
   apiGatewayDeployment:
     Type: "AWS::ApiGateway::Deployment"
