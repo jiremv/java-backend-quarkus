@@ -151,11 +151,6 @@ Durante el despliegue:
 
 ---
 
-## 📊 Colección para probar con Postman
-
-
----
-
 ## 📈 Beneficios del proyecto
 
 - ✅ Completamente **serverless**.
@@ -163,6 +158,28 @@ Durante el despliegue:
 - ✅ Totalmente elática, si se conectan muchos usuarios, soporta la concurrencia sin límite.
 - ✅ Arquitectura automatizada, simple y escalable. Para integrar más recursos y servicios.
 - ✅ Costo controlado muy bajo 1$ al mes, sin servidores ni procesamiento batch complejo.
+
+---
+
+## 📘 Documentación de la API
+
+Esta API RESTful está documentada con OpenAPI (Swagger).  
+Puedes visualizarla usando herramientas como:
+- [Swagger Editor](https://editor.swagger.io/)
+- Swagger UI (local o en línea)
+- Postman (importando el JSON/YAML)
+
+---
+
+## 📊 Colección para probar con Postman
+
+
+
+### Archivos incluidos
+- `swagger.json` – Formato OpenAPI 3.0
+- `swagger.yaml` – Alternativa legible en YAML
+
+![./images/img.png](./images/img.png)
 
 ---
 
@@ -177,7 +194,6 @@ Durante el despliegue:
 - El proyecto es ideal para ahorrar costos y obtener alta rentabilidad.
 
 ---
-
 
 ## 📜 Licencia
 

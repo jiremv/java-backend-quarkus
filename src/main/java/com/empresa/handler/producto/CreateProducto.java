@@ -24,7 +24,6 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.*;
 import static com.empresa.util.Avatar.generarColorDesdeNombre;
 import static com.empresa.util.Avatar.obtenerIniciales;
-
 public class CreateProducto extends CreateProductoAbstract {
     private static final LambdaLogger logger = new GlobalLambdaLogger();
     @Override
