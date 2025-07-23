@@ -557,6 +557,7 @@ Resources:
                   - dynamodb:PutItem
                   - dynamodb:UpdateItem
                   - dynamodb:Scan
+                  - dynamodb:DeleteItem
                 Resource: !GetAtt ProductoTable.Arn
 
   DeleteProductoFunction:
