@@ -33,7 +33,7 @@ Resources:
     Properties:
       ParentId: !GetAtt MyApi.RootResourceId
       PathPart: productos
-      RestApiId: !Ref MyAp----------- i
+      RestApiId: !Ref MyApi
 
   ResourceProductoId:
     Type: AWS::ApiGateway::Resource
