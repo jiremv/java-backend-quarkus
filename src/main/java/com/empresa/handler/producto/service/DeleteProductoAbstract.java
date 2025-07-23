@@ -62,12 +62,20 @@ public abstract class DeleteProductoAbstract implements RequestHandler<APIGatewa
                         .withStatusCode(400)
                         .withBody("Falta el parámetro de ruta 'id'");
             }
+
+            logger.log("Producto ID a eliminar: " + productoId);
+
+            // Verifica si existe antes de eliminar
+            if (dao.findById(productoId).isEmpty()) {
+                return error(404, "Producto no encontrado: " + productoId);
+            }
+
             dao.deleteById(productoId);
             return success("Producto eliminado correctamente");
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));
             return error(500, "Error interno del servidor");
-        }  
+        }
     }
 
     private APIGatewayProxyResponseEvent success(String message) {

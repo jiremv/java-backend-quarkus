@@ -173,7 +173,7 @@ Puedes visualizarla usando herramientas como:
 
 ## 📊 Colección para probar con Postman
 
-
+![./readme/images/img_5.png](./readme/images/img_5.png)
 
 ### Archivos incluidos
 - `swagger.json` – Formato OpenAPI 3.0
