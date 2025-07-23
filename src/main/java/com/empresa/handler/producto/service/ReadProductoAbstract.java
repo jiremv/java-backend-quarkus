@@ -36,7 +36,6 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
         HEADERS.put("Access-Control-Allow-Headers", "X-UserId, X-Roles, content-type, X-Custom-Header, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token");
         HEADERS.put("Access-Control-Allow-Methods", "GET, OPTIONS");
     }
-    private static final LambdaLogger logger = new GlobalLambdaLogger();
     private final Moshi moshi;
     private final JsonAdapter<ResponseProducto> responseAdapter;
     private final ProductoDAO dao;
@@ -56,8 +55,9 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
+        GlobalLambdaLogger.logRequest(request, logger);
         logger.log("--------------------------------------------------------------------------------------------------");
-        logger.log(request);
+        logger.log(request.toString());
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);

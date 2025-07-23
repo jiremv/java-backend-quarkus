@@ -25,7 +25,7 @@ public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatew
     protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
     protected abstract UserSession validateAuthToken(String token, Context context);
     protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
-    private static final LambdaLogger logger = new GlobalLambdaLogger();
+    
     private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
@@ -53,7 +53,7 @@ public  abstract class UpdateProductoAbstract implements RequestHandler<APIGatew
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.log(request);
+        GlobalLambdaLogger.logRequest(request, logger); 
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);

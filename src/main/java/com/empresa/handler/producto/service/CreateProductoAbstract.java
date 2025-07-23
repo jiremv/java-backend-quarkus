@@ -28,7 +28,7 @@ public abstract class CreateProductoAbstract implements RequestHandler<APIGatewa
     private final JsonAdapter<Producto> adapter;
     private final JsonAdapter<ResponseProducto> responseAdapter;
     private final ProductoDAO dao;
-    private static final LambdaLogger logger = new GlobalLambdaLogger();
+    
     private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
@@ -52,7 +52,7 @@ public abstract class CreateProductoAbstract implements RequestHandler<APIGatewa
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.log(request);
+        GlobalLambdaLogger.logRequest(request, logger);
         //Se comenta la autenticación y autorización
         /*String token = extractAuthToken(request);
         UserSession session = validateAuthToken(token, context);
