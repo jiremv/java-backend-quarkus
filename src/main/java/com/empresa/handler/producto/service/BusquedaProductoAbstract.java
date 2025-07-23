@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 public abstract class BusquedaProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
     protected abstract UserSession validateAuthToken(String token, Context context);
