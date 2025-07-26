@@ -6,14 +6,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class UserSession implements Serializable {
     @Json(ignore = true)
     private final transient Context awsContext;
     private Map<String, Object> attributes;
-    @Json(name = "fb_get")
+
     private String fbGet;
-    private String userId;//sid
+    private String userId;
     private String emailVerified;
     private String name;
     private String preferredUsername;

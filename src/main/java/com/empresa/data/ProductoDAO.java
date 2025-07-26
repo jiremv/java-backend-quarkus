@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 public class ProductoDAO {
-    
     private final DynamoDbTable<Producto> productosTable;
     public ProductoDAO(DynamoDbEnhancedClient enhancedClient) {
         this.productosTable = enhancedClient.table("Producto-dev", TableSchema.fromBean(Producto.class));

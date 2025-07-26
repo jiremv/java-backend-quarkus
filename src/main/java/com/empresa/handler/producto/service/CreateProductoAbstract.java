@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.empresa.data.ProductoDAO;
 import com.empresa.model.Producto;
-import com.empresa.model.UserSession;
 import com.empresa.handler.response.ResponseProducto;
 import com.empresa.util.LocalDateAdapter;
 import com.empresa.util.GlobalLambdaLogger;
@@ -21,14 +20,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 public abstract class CreateProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
-    protected abstract UserSession validateAuthToken(String token, Context context);
-    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
     private final Moshi moshi;
     private final JsonAdapter<Producto> adapter;
     private final JsonAdapter<ResponseProducto> responseAdapter;
     private final ProductoDAO dao;
-    
     private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
@@ -53,11 +48,6 @@ public abstract class CreateProductoAbstract implements RequestHandler<APIGatewa
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         GlobalLambdaLogger.logRequest(request, logger);
-        //Se comenta la autenticación y autorización
-        /*String token = extractAuthToken(request);
-        UserSession session = validateAuthToken(token, context);
-        if (session == null) return error(401, "Token inválido");
-        addAuthorizationHeaders(session, request);*/
         try {
             Producto producto = adapter.fromJson(request.getBody());
             if (producto == null) {

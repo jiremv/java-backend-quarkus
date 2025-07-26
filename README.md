@@ -6,10 +6,10 @@ https://gi2q7mf17i.execute-api.us-east-1.amazonaws.com/prod/productos
 ## 📄 Descripción
 
 Este proyecto implementa una solución **serverless**. Esta solución no utiliza servidores EC2, tampoco contenedores Kuberrnetes. 
-Es totalemente administrado por AWS el cual provee elasticidad, escalabilidad y alta disponibilidad.
+Es totalmente administrado por AWS el cual provee elasticidad, escalabilidad y alta disponibilidad.
 Este es un proyecto backend java, que puedes utilizar con tus proyectos de frontend.
 
-Utilizamos **Amazon API Gateway** que se comunica muy bien con  **AWS CloudFormation**. Vemos que ha creado el API
+Utilizamos **Amazon API Gateway** que se comunica muy bien con  **AWS CloudFormation**. 
 
 También tenemos la base de datos 100% serverless **Amazon DynamoDB**. 
 Para arquitecturas en AWS Lambda o contenedores, Quarkus Reactivo destaca por memoria, arranque y enfoque cloud-native.

@@ -7,7 +7,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.empresa.data.ProductoDAO;
 import com.empresa.model.Producto;
-import com.empresa.model.UserSession;
 import com.empresa.handler.response.ResponseProducto;
 import com.empresa.util.LocalDateAdapter;
 import com.empresa.util.GlobalLambdaLogger;
@@ -24,9 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
-    protected abstract UserSession validateAuthToken(String token, Context context);
-    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
     private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
@@ -56,18 +52,9 @@ public abstract class ReadProductoAbstract implements RequestHandler<APIGatewayP
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         GlobalLambdaLogger.logRequest(request, logger);
-        logger.log("--------------------------------------------------------------------------------------------------");
-        logger.log(request.toString());
-        //Se comenta la autenticación y autorización
-        /*String token = extractAuthToken(request);
-        UserSession session = validateAuthToken(token, context);
-        if (session == null) return error(401, "Token inválido");
-        addAuthorizationHeaders(session, request);*/
         try {
             List<Producto> lista = dao.findAll();
-            logger.log("lista: "+lista);
             String json = listAdapter.toJson(lista);
-            logger.log("json: "+json);
             return success("Consulta correcta", json);
         } catch (Exception e) {
             logger.log("ERROR GENERAL: " + getStackTrace(e));

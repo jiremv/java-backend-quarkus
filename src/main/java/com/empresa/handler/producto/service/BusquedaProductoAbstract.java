@@ -8,7 +8,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.empresa.data.ProductoDAO;
 import com.empresa.handler.response.ResponseProducto;
 import com.empresa.model.Producto;
-import com.empresa.model.UserSession;
 import com.empresa.util.LocalDateAdapter;
 import com.empresa.util.GlobalLambdaLogger;
 import com.squareup.moshi.JsonAdapter;
@@ -24,10 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 public abstract class BusquedaProductoAbstract implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-    protected abstract String extractAuthToken(APIGatewayProxyRequestEvent request);
-    protected abstract UserSession validateAuthToken(String token, Context context);
-    protected abstract void addAuthorizationHeaders(UserSession session, APIGatewayProxyRequestEvent request);
-
     private static final Map<String, String> HEADERS;
     static {
         HEADERS = new HashMap<>();
@@ -58,11 +53,6 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         LambdaLogger logger = context.getLogger();
         GlobalLambdaLogger.logRequest(request, logger);
-        //Se comenta la autenticación y autorización
-        /*String token = extractAuthToken(request);
-        UserSession session = validateAuthToken(token, context);
-        if (session == null) return error(401, "Token inválido");
-        addAuthorizationHeaders(session, request);*/
         try {
             Map<String, String> pathParams = request.getPathParameters();
             String productoId = pathParams != null ? pathParams.get("id") : null;
@@ -121,5 +111,4 @@ public abstract class BusquedaProductoAbstract implements RequestHandler<APIGate
         t.printStackTrace(new PrintWriter(sw));
         return sw.toString();
     }
-
 }
